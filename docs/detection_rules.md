@@ -23,7 +23,7 @@ Repeated failed login attempts from the same IP address may indicate password gu
 
 ### Example Alert
 
-‘’‘json
+```json
 {
   "alert_type": "Brute Force Attack",
   "source_ip": "192.168.1.50",
