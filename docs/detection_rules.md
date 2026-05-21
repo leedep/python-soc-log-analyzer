@@ -8,18 +8,19 @@ This document explains the detection rules used in the Python-based SOC Log Anal
 
 ### Detection Logic
 
-If the same source IP generates 5 or more failed login attempts within 5 minutes, the analyzer raises a high-severity brute-force alert.
+If the same source IP generates **5 or more failed login attempts within 5 minutes**, the analyzer raises a **high-severity brute-force alert**.
 
 ### Security Rationale
 
 Repeated failed login attempts from the same IP address may indicate password guessing, credential stuffing, or automated brute-force activity.
+
 ### Fields Used
 
-- timestamp
-- source_ip
-- username
-- event_type
-- status
+- `timestamp`
+- `source_ip`
+- `username`
+- `event_type`
+- `status`
 
 ### Example Alert
 
@@ -30,24 +31,31 @@ Repeated failed login attempts from the same IP address may indicate password gu
   "severity": "High",
   "risk_score": 80,
   "description": "192.168.1.50 generated 5 failed login attempts within 5 minutes."
-}```
+}
+````
 
-## 2.Suspicious Admin Login Detection
+---
 
-###Detection Logic
+## 2. Suspicious Admin Login Detection
 
-If a successful login is made to a privileged account such as root, admin, or administrator, the analyzer raises a medium-severity alert.
+### Detection Logic
+
+If a successful login is made to a privileged account such as `root`, `admin`, or `administrator`, the analyzer raises a **medium-severity alert**.
+
 ### Security Rationale
 
 Privileged account logins are high-value events in SOC monitoring. A successful login to an administrative account may require further investigation, especially when it comes from an unfamiliar source IP.
 
 ### Fields Used
 
-- timestamp
-- source_ip
-- username
-- event_type
-- status
+* `timestamp`
+* `source_ip`
+* `username`
+* `event_type`
+* `status`
+
+### Example Alert
+
 ```json
 {
   "alert_type": "Suspicious Admin Login",
@@ -58,3 +66,6 @@ Privileged account logins are high-value events in SOC monitoring. A successful 
   "description": "Successful login to privileged account 'admin' from 203.0.113.10."
 }
 ```
+
+````
+
