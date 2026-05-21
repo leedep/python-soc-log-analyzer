@@ -1,25 +1,38 @@
 from parsers.auth_parser import parse_auth_log
 from detection.brute_force import detect_brute_force
+from detection.suspicious_login import detect_suspicious_admin_login
 
 
 def main() -> None:
     log_file = "data/sample_auth.log"
 
     events = parse_auth_log(log_file)
-    alerts = detect_brute_force(events)
+
+    brute_force_alerts = detect_brute_force(events)
+    admin_login_alerts = detect_suspicious_admin_login(events)
+
+    all_alerts = brute_force_alerts + admin_login_alerts
 
     print("SOC Log Analysis Completed.")
     print(f"Total events parsed: {len(events)}")
-    print(f"Total alerts generated: {len(alerts)}")
+    print(f"Total alerts generated: {len(all_alerts)}")
     print()
 
-    for alert in alerts:
+    for alert in all_alerts:
         print(f"[{alert['severity']}] {alert['alert_type']}")
-        print(f"Source IP: {alert['source_ip']}")
-        print(f"Risk Score: {alert['risk_score']}")
-        print(f"Description: {alert['description']}")
-        print(f"First Seen: {alert['first_seen']}")
-        print(f"Last Seen: {alert['last_seen']}")
+        print(f"Source IP: {alert.get('source_ip', 'N/A')}")
+        print(f"Risk Score: {alert.get('risk_score', 'N/A')}")
+        print(f"Description: {alert.get('description', 'N/A')}")
+
+        if "first_seen" in alert:
+            print(f"First Seen: {alert['first_seen']}")
+
+        if "last_seen" in alert:
+            print(f"Last Seen: {alert['last_seen']}")
+
+        if "timestamp" in alert:
+            print(f"Timestamp: {alert['timestamp']}")
+
         print("-" * 60)
 
 
