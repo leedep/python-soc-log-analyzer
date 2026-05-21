@@ -1,24 +1,11 @@
 from parsers.auth_parser import parse_auth_log
 from detection.brute_force import detect_brute_force
 from detection.suspicious_login import detect_suspicious_admin_login
+from reporting.csv_report import save_alerts_to_csv
 
 
-def main() -> None:
-    log_file = "data/sample_auth.log"
-
-    events = parse_auth_log(log_file)
-
-    brute_force_alerts = detect_brute_force(events)
-    admin_login_alerts = detect_suspicious_admin_login(events)
-
-    all_alerts = brute_force_alerts + admin_login_alerts
-
-    print("SOC Log Analysis Completed.")
-    print(f"Total events parsed: {len(events)}")
-    print(f"Total alerts generated: {len(all_alerts)}")
-    print()
-
-    for alert in all_alerts:
+def print_alerts(alerts: list[dict]) -> None:
+    for alert in alerts:
         print(f"[{alert['severity']}] {alert['alert_type']}")
         print(f"Source IP: {alert.get('source_ip', 'N/A')}")
         print(f"Risk Score: {alert.get('risk_score', 'N/A')}")
@@ -34,6 +21,26 @@ def main() -> None:
             print(f"Timestamp: {alert['timestamp']}")
 
         print("-" * 60)
+
+
+def main() -> None:
+    log_file = "data/sample_auth.log"
+    output_file = "output/alerts.csv"
+
+    events = parse_auth_log(log_file)
+
+    brute_force_alerts = detect_brute_force(events)
+    admin_login_alerts = detect_suspicious_admin_login(events)
+
+    all_alerts = brute_force_alerts + admin_login_alerts
+
+    print("SOC Log Analysis Completed.")
+    print(f"Total events parsed: {len(events)}")
+    print(f"Total alerts generated: {len(all_alerts)}")
+    print()
+
+    print_alerts(all_alerts)
+    save_alerts_to_csv(all_alerts, output_file)
 
 
 if __name__ == "__main__":
