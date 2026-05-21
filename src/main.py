@@ -1,7 +1,6 @@
 from parsers.auth_parser import parse_auth_log
 from detection.brute_force import detect_brute_force
 from detection.suspicious_login import detect_suspicious_admin_login
-from reporting.csv_report import save_alerts_to_csv
 
 
 def print_alerts(alerts: list[dict]) -> None:
@@ -25,7 +24,6 @@ def print_alerts(alerts: list[dict]) -> None:
 
 def main() -> None:
     log_file = "data/sample_auth.log"
-    output_file = "output/alerts.csv"
 
     events = parse_auth_log(log_file)
 
@@ -40,7 +38,6 @@ def main() -> None:
     print()
 
     print_alerts(all_alerts)
-    save_alerts_to_csv(all_alerts, output_file)
 
 
 if __name__ == "__main__":
