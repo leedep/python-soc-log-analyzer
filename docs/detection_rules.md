@@ -31,7 +31,7 @@ Repeated failed login attempts from the same IP address may indicate password gu
   "risk_score": 80,
   "description": "192.168.1.50 generated 5 failed login attempts within 5 minutes."
 }
-
+‘’‘
 
 ## 2.Suspicious Admin Login Detection
 
